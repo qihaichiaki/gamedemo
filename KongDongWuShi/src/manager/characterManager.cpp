@@ -1,5 +1,5 @@
-#include "player.h"
-#include "enemy.h"
+#include "player/player.h"
+#include "enemy/enemy.h"
 #include "characterManager.h"
 #include "bulletTimeManager.h"
 
@@ -19,7 +19,8 @@ void CharacterManager::onInput(const ExMessage& msg)
 void CharacterManager::onUpdate(float delta)
 {
     player->onUpdate(delta);
-    enemy->onUpdate(delta);
+    float scaledDelta = BulletTimeManager::instance()->onUpdate(delta);
+    enemy->onUpdate(scaledDelta);
 }
 
 void CharacterManager::onRender()

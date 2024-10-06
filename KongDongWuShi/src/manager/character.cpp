@@ -10,14 +10,14 @@ Character::Character()
 
     timerInvulnerableStatus.setWaitTime(1.0f);
     timerInvulnerableStatus.setOneShot(true);
-    timerInvulnerableStatus.setOneTimeout([&]()
+    timerInvulnerableStatus.setOnTimeout([&]()
         {
             isInvulnerable = false;
         });
     
     timerInvulnerableBlink.setWaitTime(0.075f);
     timerInvulnerableBlink.setOneShot(false);
-    timerInvulnerableBlink.setOneTimeout([&]()
+    timerInvulnerableBlink.setOnTimeout([&]()
         {
             isBlinkInvisible = !isBlinkInvisible;
         });

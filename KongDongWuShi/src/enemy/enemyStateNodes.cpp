@@ -7,7 +7,7 @@ EnemyAimState::EnemyAimState()
 {
     timer.setOneShot(true);
     timer.setWaitTime(0.5f);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->setGravityEnabled(true);
@@ -74,7 +74,7 @@ EnemyDashOnFloorState::EnemyDashOnFloorState()
 {
     timer.setOneShot(true);
     timer.setWaitTime(0.5f);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->setDashingOnFloor(false);
@@ -133,7 +133,7 @@ void EnemyFallState::onUpdate(float delta)
 EnemyIdleState::EnemyIdleState()
 {
     timer.setOneShot(true);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             
@@ -307,7 +307,7 @@ EnemySquatState::EnemySquatState()
 {
     timer.setOneShot(true);
     timer.setWaitTime(0.5f);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->switchState("dashOnFloor");
@@ -338,7 +338,7 @@ EnemyThrowBarbState::EnemyThrowBarbState()
 {
     timer.setOneShot(true);
     timer.setWaitTime(0.8f);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->throwBarbs();
@@ -370,7 +370,7 @@ EnemyThrowSilkState::EnemyThrowSilkState()
 {
     timer.setOneShot(true);
     timer.setWaitTime(0.9f);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->setGravityEnabled(true);
@@ -413,7 +413,7 @@ EnemyThrowSwordState::EnemyThrowSwordState()
 {
     timerThrow.setWaitTime(0.65f);
     timerThrow.setOneShot(true);
-    timerThrow.setOneTimeout([&]()
+    timerThrow.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
             enemy->throwSword();
@@ -423,7 +423,7 @@ EnemyThrowSwordState::EnemyThrowSwordState()
     
     timerSwitch.setWaitTime(1.0f);
     timerSwitch.setOneShot(true);
-    timerSwitch.setOneTimeout([&]()
+    timerSwitch.setOnTimeout([&]()
         {
             Enemy* enemy = (Enemy*)CharacterManager::instance()->getEnemy();
 

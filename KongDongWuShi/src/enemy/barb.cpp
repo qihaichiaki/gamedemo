@@ -26,7 +26,7 @@ Barb::Barb()
 
     timerIdle.setWaitTime((float)rangeRandom(3, 10));
     timerIdle.setOneShot(true);
-    timerIdle.setOneTimeout([&]()
+    timerIdle.setOnTimeout([&]()
         {
             if (stage == Stage::Idle)
             {
@@ -37,7 +37,7 @@ Barb::Barb()
     
     timerAim.setWaitTime(0.75f);
     timerAim.setOneShot(true);
-    timerAim.setOneTimeout([&]()
+    timerAim.setOnTimeout([&]()
         {  
             if (stage == Stage::Aim)
             {

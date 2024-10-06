@@ -33,14 +33,14 @@ Player::Player()
     // 翻滚闪避冷却、攻击冷却定时器的初始化
     timerRollCd.setWaitTime(CD_ROLL);
     timerRollCd.setOneShot(true);
-    timerRollCd.setOneTimeout([&]()
+    timerRollCd.setOnTimeout([&]()
         {
             isRollCdComp = true;
         });
 
     timerAttackCd.setWaitTime(CD_ATTACK);
     timerAttackCd.setOneShot(true);
-    timerAttackCd.setOneTimeout([&]()
+    timerAttackCd.setOnTimeout([&]()
         {
             isAttackCdComp = true;
         });
@@ -236,12 +236,24 @@ void Player::onInput(const ExMessage& msg)
             break;
         case 0x57:  // w
         case VK_UP: 
+            isUpKeyDown = true;
+            break;
         case VK_SPACE: 
             isJumpKeyDown = true;
+            break;
+        case 0x53:  // s
+            isDownKeyDown = true;
             break;
         case VK_SHIFT:
             isRollKeyDown = true;
             break;
+        case 0x4a:  // j
+            isAttackKeyDown = true;
+            updateAttackDir();
+            break;
+        case 0x49:  // i
+            playAudio(_T("bullet_time"), false);
+            BulletTimeManager::instance()->setStatus(BulletTimeManager::Status::Entering);
         default:
             break;
         }
@@ -259,16 +271,29 @@ void Player::onInput(const ExMessage& msg)
             break;
         case 0x57:  // w
         case VK_UP: 
+            isUpKeyDown = false;
+            break;
         case VK_SPACE: 
             isJumpKeyDown = false;
+            break;
+        case 0x53:  // s
+            isDownKeyDown = false;
             break;
         case VK_SHIFT:
             isRollKeyDown = false;
             break;
+        case 0x4a:  // j
+            isAttackKeyDown = false;
+            break;
+        case 0x49:  // i
+            playAudio(_T("bullet_time"));
+            BulletTimeManager::instance()->setStatus(BulletTimeManager::Status::Exiting);
         default:
             break;
         }
         break;
+    
+    // 鼠标攻击保留 -> j
     case WM_LBUTTONDOWN:
         isAttackKeyDown = true;
         updateAttackDir(msg.x, msg.y);
@@ -276,6 +301,8 @@ void Player::onInput(const ExMessage& msg)
     case WM_LBUTTONUP:
         isAttackKeyDown = false;
         break;
+    
+    // 鼠标子弹时间保留 -> i
     case WM_RBUTTONDOWN:
         playAudio(_T("bullet_time"), false);
         BulletTimeManager::instance()->setStatus(BulletTimeManager::Status::Entering);
@@ -377,6 +404,7 @@ void Player::onAttack()
     currentSlashAnimation->reset();
 }
 
+// 根据鼠标位置更新Player攻击方向
 void Player::updateAttackDir(int x, int y)
 {
     static const float PI = 3.141592654f;
@@ -390,4 +418,25 @@ void Player::updateAttackDir(int x, int y)
         attackDir = AttackDir::Left;
     else
         attackDir = AttackDir::Up;
+}
+
+// 根据按键控制Player攻击方向
+void Player::updateAttackDir()
+{
+    if (isLeftKeyDown)
+        attackDir = AttackDir::Left;
+    else if (isRightKeyDown)
+        attackDir = AttackDir::Right;
+    else if (isUpKeyDown)
+        attackDir = AttackDir::Up;
+    else if (isDownKeyDown)
+        attackDir = AttackDir::Down;
+    else
+    {
+        // 攻击时没有按住方向键
+        if (isFacingLeft)
+            attackDir = AttackDir::Left;
+        else
+            attackDir = AttackDir::Right;
+    }
 }

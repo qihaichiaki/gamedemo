@@ -8,7 +8,7 @@ PlayerAttackState::PlayerAttackState()
 {
     timer.setWaitTime(0.3f);
     timer.setOneShot(true);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Player* player = reinterpret_cast<Player*>(CharacterManager::instance()->getPlayer());
             player->setAttacking(false);
@@ -102,7 +102,7 @@ PlayerDeadState::PlayerDeadState()
 {
     timer.setWaitTime(2.0f);
     timer.setOneShot(true);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             MessageBox(GetHWnd(), _T("I'm sorry. I can't die yet......"), _T("Game over!"), MB_OK);
             exit(0);
@@ -206,7 +206,7 @@ PlayerRollState::PlayerRollState()
 {
     timer.setWaitTime(0.35f);
     timer.setOneShot(true);
-    timer.setOneTimeout([&]()
+    timer.setOnTimeout([&]()
         {
             Player* player = (Player*)CharacterManager::instance()->getPlayer();
             player->setRolling(false);

@@ -17,7 +17,7 @@ Enemy::Enemy()
     hitBox->setLayerDst(CollisionLayer::Player);
 
     hurtBox->setLayerSrc(CollisionLayer::Enemy);
-    hurtBox->setLayerDst(CollisionLayer::Player);
+    hurtBox->setLayerDst(CollisionLayer::None);
     hurtBox->setOnCollide([&]()
         {
             decreaseHp();

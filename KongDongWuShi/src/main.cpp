@@ -1,3 +1,5 @@
+#pragma comment (linker,"/subsystem:windows /entry:mainCRTStartup")		// 关闭控制台窗口
+
 #include "util.h"
 #include "resourcesManager.h"
 #include "collisionManager.h"
@@ -40,8 +42,9 @@ static void drawBackground()
 
 int main(int argc, char const *argv[])
 {
-    HWND hwnd = initgraph(1280, 720, EW_SHOWCONSOLE);
-    SetWindowText(hwnd, _T("Hollow Katana"));
+    HWND hwnd = initgraph(1280, 720);
+    // SetWindowText(hwnd, _T("Hollow Katana"));
+    SetWindowTextW(hwnd, L"空洞武士");
 
     // 资源加载
     try
@@ -60,9 +63,10 @@ int main(int argc, char const *argv[])
     playAudio(_T("bgm"), true);
 
     // 游戏说明
-    MessageBox(GetHWnd(), _T("left: a right: d jump: space\nAttack: Left mouse\nRolling: LSHIFT\nBullet time: Right mouse"), _T("button"), MB_OK);
+    MessageBoxW(GetHWnd(), L"左: a 右: d\n跳: space 攻击: j\n闪避: lshift 子弹时间: i", L"按键映射", MB_OK);
 
-    const nanoseconds frameDuration(1000000000 / 144);
+    // 144 FPS
+    const nanoseconds frameDuration((int)1e9 / 144);
     steady_clock::time_point lastTick = steady_clock::now();
 
     ExMessage msg;
@@ -80,8 +84,7 @@ int main(int argc, char const *argv[])
         duration<float> delta = duration<float>(frameStart - lastTick);
 
         // 处理更新
-        float scaledDelta = BulletTimeManager::instance()->onUpdate(delta.count());
-        CharacterManager::instance()->onUpdate(scaledDelta);
+        CharacterManager::instance()->onUpdate(delta.count());
         CollisionManager::instance()->processCollide();
 
         setbkcolor(RGB(0, 0, 0));
@@ -102,6 +105,7 @@ int main(int argc, char const *argv[])
     }
 
     EndBatchDraw();
+    closegraph();
 
     return 0;
 }

@@ -22,13 +22,14 @@ public:
     Animation()
     {
         timer.setOneShot(false);
-        timer.setOneTimeout(
+        timer.setOnTimeout(
             [&]()
             {
                 idxFrame++;
                 if (idxFrame >= frameList.size())
                 {
                     idxFrame = isLoop ? 0 : frameList.size() - 1;
+                    // BUG: 这里如果是不循环动画，这里动画不停止，此回调岂不是达到最后后一直调用？
                     if (!isLoop && onFinished)
                         onFinished();
                 }
@@ -38,7 +39,7 @@ public:
 
     ~Animation() = default;
 
-    // 重置动画
+    /// @brief 重置动画
     void reset()
     {
         timer.restart();
@@ -46,32 +47,45 @@ public:
         idxFrame = 0;
     }
 
+    /// @brief 设置动画锚点
+    /// @param mode 锚点
     void setAnchorMode(AnchorMode mode)
     {
         anchorMode = mode;
     }
 
+    /// @brief 设置动画位置
+    /// @param position 位置坐标
     void setPosition(const Vector2& position)
     {
         this->position = position;
     }
 
+    /// @brief 设置是否循环
+    /// @param isLoop 循环?
     void setLoop(bool isLoop)
     {
         this->isLoop = isLoop;
     }
 
+    /// @brief 设置动画在多少s后播放一帧
+    /// @param interval s
     void setInterval(float interval)
     {
         timer.setWaitTime(interval);
     }
 
+    /// @brief 设置动画结束后执行的回调(Loop无效)
+    /// @param onFinished 执行回调逻辑
     void setOnFinished(std::function<void()> onFinished)
     {
         this->onFinished = onFinished;
     }
 
-    // 添加动画帧
+    /// @brief 添加动画帧
+    /// @param image 图片对象
+    /// @param numH 均分个数(对于一个图片存在多帧情况)
+    /// @warning numH需要>=1，不可等于0
     void addFrame(IMAGE* image, int numH)
     {
         int width = image->getwidth();
@@ -88,6 +102,8 @@ public:
         }
     }
 
+    /// @brief 添加动画帧
+    /// @param atlas 图集(其中一个图片对象就是一个动画帧)
     void addFrame(Atlas* atlas)
     {
         for (int i = 0; i < atlas->getSize(); ++i)
@@ -104,12 +120,14 @@ public:
         }
     }
 
-    // 更新+渲染
+    /// @brief 每帧更新
+    /// @param delta 帧率
     void onUpdate(float delta)
     {
         timer.onUpdate(delta);
     }
 
+    /// @brief 渲染
     void onRender()
     {
         const Frame& frame = frameList[idxFrame];

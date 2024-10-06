@@ -61,6 +61,8 @@ private:
     bool isJumpKeyDown = false;
     bool isRollKeyDown = false;
     bool isAttackKeyDown = false;
+    bool isUpKeyDown = false;
+    bool isDownKeyDown = false;
 
     // 攻击动画特效
     Animation animationSlashUp;
@@ -87,6 +89,7 @@ private:
 private:
     // 传入鼠标点击的坐标，计算转换为攻击的方向
     void updateAttackDir(int x, int y);
+    void updateAttackDir();
 };
 
 #endif

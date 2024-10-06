@@ -73,7 +73,7 @@ static const std::vector<AtlasResInfo> atlasInfoList =
 // 检查图片对象是否加载成功
 static inline bool checkImageValid(IMAGE* image)
 {
-    // TODO: 存在问题，即使没有加载成功也不会返回nullptr
+    // HACK: 存在问题，即使没有加载成功也不会返回nullptr,下面使用检测图片宽高代替
     // return GetImageBuffer(image);  // 获取图片像素缓冲区（如果加载失败，这里获取的便就是空指针）
     // 通过图片尺寸存在0进行判断
     return image->getwidth() && image->getwidth();
