@@ -64,6 +64,17 @@ private:
     bool isUpKeyDown = false;
     bool isDownKeyDown = false;
 
+    // 键位映射
+    int leftKey;
+    int rightKey;
+    int upKey;
+    int downKey;
+    int attackKey;
+    int rollKey;
+    int jumpKey;
+    int bulletTimeKey;
+
+
     // 攻击动画特效
     Animation animationSlashUp;
     Animation animationSlashDown;

@@ -1,7 +1,7 @@
 #ifndef _ANIMATION_H_
 #define _ANIMATION_H_
 
-#include "util.h"
+#include "util.hpp"
 #include "timer.h"
 #include "atlas.h"
 #include "vector2.h"

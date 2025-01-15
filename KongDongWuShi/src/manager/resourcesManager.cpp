@@ -1,9 +1,10 @@
 #include "resourcesManager.h"
-#include "util.h"
+
 #include <string>
 
-ResourcesManager* ResourcesManager::instance()
-{
+#include "util.hpp"
+
+ResourcesManager* ResourcesManager::instance() {
     static ResourcesManager manager;
     return &manager;
 }
@@ -11,105 +12,164 @@ ResourcesManager* ResourcesManager::instance()
 ResourcesManager::ResourcesManager() = default;
 ResourcesManager::~ResourcesManager() = default;
 
-struct ImageResInfo
-{
+struct ImageResInfo {
     std::string id;
     LPCTSTR path;
 };
 
-struct AtlasResInfo
-{
+struct AtlasResInfo {
     std::string id;
     LPCTSTR path;
     int numFrame = 0;  // 图片数量
 };
 
 // 添加图片资源信息列表定义
-static const std::vector<ImageResInfo> imageInfoList = 
-{
-    { "background",                     _T(R"(resources\background.png)") },
-    { "ui_heart",                       _T(R"(resources\ui_heart.png)") },
+static const std::vector<ImageResInfo> imageInfoList = {
+    {"background", _T(R"(resources\background.png)")},
+    {"ui_heart", _T(R"(resources\ui_heart.png)")},
 
-    { "player_attack_right",            _T(R"(resources\player\attack.png)") },
-    { "player_dead_right",              _T(R"(resources\player\dead.png)") },  
-    { "player_fall_right",              _T(R"(resources\player\fall.png)") },  
-    { "player_idle_right",              _T(R"(resources\player\idle.png)") },  
-    { "player_jump_right",              _T(R"(resources\player\jump.png)") },  
-    { "player_run_right",               _T(R"(resources\player\run.png)") },
-    { "player_roll_right",              _T(R"(resources\player\roll.png)") },
-    
-    { "player_vfx_attack_down",         _T(R"(resources\player\vfx_attack_down.png)") },
-    { "player_vfx_attack_left",         _T(R"(resources\player\vfx_attack_left.png)") },
-    { "player_vfx_attack_right",        _T(R"(resources\player\vfx_attack_right.png)") },
-    { "player_vfx_attack_up",           _T(R"(resources\player\vfx_attack_up.png)") },
-    { "player_vfx_jump",                _T(R"(resources\player\vfx_jump.png)") },
-    { "player_vfx_land",                _T(R"(resources\player\vfx_land.png)") },
+    {"player_attack_right", _T(R"(resources\player\attack.png)")},
+    {"player_dead_right", _T(R"(resources\player\dead.png)")},
+    {"player_fall_right", _T(R"(resources\player\fall.png)")},
+    {"player_idle_right", _T(R"(resources\player\idle.png)")},
+    {"player_jump_right", _T(R"(resources\player\jump.png)")},
+    {"player_run_right", _T(R"(resources\player\run.png)")},
+    {"player_roll_right", _T(R"(resources\player\roll.png)")},
+
+    {"player_vfx_attack_down", _T(R"(resources\player\vfx_attack_down.png)")},
+    {"player_vfx_attack_left", _T(R"(resources\player\vfx_attack_left.png)")},
+    {"player_vfx_attack_right", _T(R"(resources\player\vfx_attack_right.png)")},
+    {"player_vfx_attack_up", _T(R"(resources\player\vfx_attack_up.png)")},
+    {"player_vfx_jump", _T(R"(resources\player\vfx_jump.png)")},
+    {"player_vfx_land", _T(R"(resources\player\vfx_land.png)")},
 };
 
 // 添加图集资源信息列表定义
-static const std::vector<AtlasResInfo> atlasInfoList = 
-{
-    { "barb_break",                     _T(R"(resources\enemy\barb_break\%d.png)"),          3 },
-    { "barb_loose",                     _T(R"(resources\enemy\barb_loose\%d.png)"),          5 },
-    { "silk",                           _T(R"(resources\enemy\silk\%d.png)"),                9 },
-    { "sword_left",                     _T(R"(resources\enemy\sword\%d.png)"),               3 },
+static const std::vector<AtlasResInfo> atlasInfoList = {
+    {"barb_break", _T(R"(resources\enemy\barb_break\%d.png)"), 3},
+    {"barb_loose", _T(R"(resources\enemy\barb_loose\%d.png)"), 5},
+    {"silk", _T(R"(resources\enemy\silk\%d.png)"), 9},
+    {"sword_left", _T(R"(resources\enemy\sword\%d.png)"), 3},
 
-    { "enemy_aim_left",                 _T(R"(resources\enemy\aim\%d.png)"),                 9 },
-    { "enemy_dash_in_air_left",         _T(R"(resources\enemy\dash_in_air\%d.png)"),         2 },
-    { "enemy_dash_on_floor_left",       _T(R"(resources\enemy\dash_on_floor\%d.png)"),       2 },
-    { "enemy_fall_left",                _T(R"(resources\enemy\fall\%d.png)"),                4 },
-    { "enemy_idle_left",                _T(R"(resources\enemy\idle\%d.png)"),                6 },
-    { "enemy_jump_left",                _T(R"(resources\enemy\jump\%d.png)"),                8 },
-    { "enemy_run_left",                 _T(R"(resources\enemy\run\%d.png)"),                 8 },
-    { "enemy_squat_left",               _T(R"(resources\enemy\squat\%d.png)"),              10 },
-    { "enemy_throw_barb_left",          _T(R"(resources\enemy\throw_barb\%d.png)"),          8 },
-    { "enemy_throw_silk_left",          _T(R"(resources\enemy\throw_silk\%d.png)"),         17 },
-    { "enemy_throw_sword_left",         _T(R"(resources\enemy\throw_sword\%d.png)"),        16 },
+    {"enemy_aim_left", _T(R"(resources\enemy\aim\%d.png)"), 9},
+    {"enemy_dash_in_air_left", _T(R"(resources\enemy\dash_in_air\%d.png)"), 2},
+    {"enemy_dash_on_floor_left", _T(R"(resources\enemy\dash_on_floor\%d.png)"),
+     2},
+    {"enemy_fall_left", _T(R"(resources\enemy\fall\%d.png)"), 4},
+    {"enemy_idle_left", _T(R"(resources\enemy\idle\%d.png)"), 6},
+    {"enemy_jump_left", _T(R"(resources\enemy\jump\%d.png)"), 8},
+    {"enemy_run_left", _T(R"(resources\enemy\run\%d.png)"), 8},
+    {"enemy_squat_left", _T(R"(resources\enemy\squat\%d.png)"), 10},
+    {"enemy_throw_barb_left", _T(R"(resources\enemy\throw_barb\%d.png)"), 8},
+    {"enemy_throw_silk_left", _T(R"(resources\enemy\throw_silk\%d.png)"), 17},
+    {"enemy_throw_sword_left", _T(R"(resources\enemy\throw_sword\%d.png)"), 16},
 
-    { "enemy_vfx_dash_in_air_left",     _T(R"(resources\enemy\vfx_dash_in_air\%d.png)"),    5 },
-    { "enemy_vfx_dash_on_floor_left",   _T(R"(resources\enemy\vfx_dash_on_floor\%d.png)"),  6 },
+    {"enemy_vfx_dash_in_air_left",
+     _T(R"(resources\enemy\vfx_dash_in_air\%d.png)"), 5},
+    {"enemy_vfx_dash_on_floor_left",
+     _T(R"(resources\enemy\vfx_dash_on_floor\%d.png)"), 6},
 };
 
 // 检查图片对象是否加载成功
-static inline bool checkImageValid(IMAGE* image)
-{
-    // HACK: 存在问题，即使没有加载成功也不会返回nullptr,下面使用检测图片宽高代替
-    // return GetImageBuffer(image);  // 获取图片像素缓冲区（如果加载失败，这里获取的便就是空指针）
+static inline bool checkImageValid(IMAGE* image) {
+    // HACK:
+    // 存在问题，即使没有加载成功也不会返回nullptr,下面使用检测图片宽高代替
+    // return GetImageBuffer(image);  //
+    // 获取图片像素缓冲区（如果加载失败，这里获取的便就是空指针）
     // 通过图片尺寸存在0进行判断
     return image->getwidth() && image->getwidth();
 }
 
-
 // 封装ResourcesManager其余方法
 
-// 加载磁盘中的全部对象
-void ResourcesManager::load()
-{
+// 加载前置资源
+void ResourcesManager::loadPre() {
+    // 加载音频
+    loadAudio(_T(R"(resources\audio\bgm.mp3)"), _T("bgm"));
+    loadAudio(_T(R"(resources\audio\barb_break.mp3)"), _T("barb_break"));
+    loadAudio(_T(R"(resources\audio\bullet_time.mp3)"), _T("bullet_time"));
+
+    loadAudio(_T(R"(resources\audio\enemy_dash.mp3)"), _T("enemy_dash"));
+    loadAudio(_T(R"(resources\audio\enemy_run.mp3)"), _T("enemy_run"));
+    loadAudio(_T(R"(resources\audio\enemy_hurt_1.mp3)"), _T("enemy_hurt_1"));
+    loadAudio(_T(R"(resources\audio\enemy_hurt_2.mp3)"), _T("enemy_hurt_2"));
+    loadAudio(_T(R"(resources\audio\enemy_hurt_3.mp3)"), _T("enemy_hurt_3"));
+    loadAudio(_T(R"(resources\audio\enemy_throw_barbs.mp3)"),
+              _T("enemy_throw_barbs"));
+    loadAudio(_T(R"(resources\audio\enemy_throw_silk.mp3)"),
+              _T("enemy_throw_silk"));
+    loadAudio(_T(R"(resources\audio\enemy_throw_sword.mp3)"),
+              _T("enemy_throw_sword"));
+
+    loadAudio(_T(R"(resources\audio\player_attack_1.mp3)"),
+              _T("player_attack_1"));
+    loadAudio(_T(R"(resources\audio\player_attack_2.mp3)"),
+              _T("player_attack_2"));
+    loadAudio(_T(R"(resources\audio\player_attack_3.mp3)"),
+              _T("player_attack_3"));
+    loadAudio(_T(R"(resources\audio\player_dead.mp3)"), _T("player_dead"));
+    loadAudio(_T(R"(resources\audio\player_hurt.mp3)"), _T("player_hurt"));
+    loadAudio(_T(R"(resources\audio\player_jump.mp3)"), _T("player_jump"));
+    loadAudio(_T(R"(resources\audio\player_land.mp3)"), _T("player_land"));
+    loadAudio(_T(R"(resources\audio\player_roll.mp3)"), _T("player_roll"));
+    loadAudio(_T(R"(resources\audio\player_run.mp3)"), _T("player_run"));
+
+    loadAudio(_T(R"(resources\audio\bgm_start.mp3)"), _T("bgm_start"));
+    loadAudio(_T(R"(resources\audio\play_tape.mp3)"), _T("play_tape"));
+
+    // UI wav
+    loadAudio(_T(R"(resources\audio\ui_switch.wav)"), _T("ui_switch"));
+    loadAudio(_T(R"(resources\audio\ui_confirm.wav)"), _T("ui_confirm"));
+
+    // 加载导入字体
+    AddFontResourceEx(_T("resources/font/zpix.ttf"), FR_PRIVATE, nullptr);
+    settextstyle(25, 0, _T("zpix"));
+    setbkmode(TRANSPARENT);
+
+    // 加载加载动画
+    Atlas* atlas1 = new Atlas();
+    atlas1->load(_T(R"(resources\effect\little_knight\%d.png)"), 5);
+    atlasPool["little_knight"] = atlas1;
+    Atlas* atlas2 = new Atlas();
+    atlas2->load(_T(R"(resources\effect\bug\%d.png)"), 8);
+    atlasPool["bug"] = atlas2;
+    Atlas* atlas3 = new Atlas();
+    atlas3->load(_T(R"(resources\effect\light\%d.png)"), 16);
+    atlasPool["light"] = atlas3;
+    Atlas* atlas4 = new Atlas();
+    atlas4->load(_T(R"(resources\effect\ui_choose\%d.png)"), 11);
+    atlasPool["ui_choose_left"] = atlas4;
+    flipAtlas("ui_choose_left", "ui_choose_right");
+
+    std::cout << "loadPre over!" << std::endl;
+}
+
+// 加载异步资源: 图像和设置文件
+void ResourcesManager::loadAsync() {
     // 读取当前资源列表：图片和图集
-    for(const auto& info : imageInfoList)
-    {
+    for (const auto& info : imageInfoList) {
         IMAGE* image = new IMAGE();
         loadimage(image, info.path);
-        if (!checkImageValid(image))
-        {
+        if (!checkImageValid(image)) {
             delete image;
+            std::cout << "image load error: " << info.path << std::endl;
             throw info.path;
         }
         imagePool[info.id] = image;
+        std::cout << "load image id: " << info.id << std::endl;
     }
 
-    for(const auto& info : atlasInfoList)
-    {
+    for (const auto& info : atlasInfoList) {
         Atlas* atlas = new Atlas();
         atlas->load(info.path, info.numFrame);
-        for (int i = 0; i < atlas->getSize(); i++)
-        {
+        for (int i = 0; i < atlas->getSize(); i++) {
             IMAGE* image = atlas->getImage(i);
-            if (!checkImageValid(image))
-            {
+            if (!checkImageValid(image)) {
                 delete atlas;
+                std::cout << "atlas load error: " << info.path << std::endl;
                 throw info.path;
             }
+            std::cout << "load atlas id: " << info.id << std::endl;
         }
         atlasPool[info.id] = atlas;
     }
@@ -139,67 +199,46 @@ void ResourcesManager::load()
     flipAtlas("enemy_vfx_dash_in_air_left", "enemy_vfx_dash_in_air_right");
     flipAtlas("enemy_vfx_dash_on_floor_left", "enemy_vfx_dash_on_floor_right");
 
-    // 加载音频
-    loadAudio(_T(R"(resources\audio\bgm.mp3)"), _T("bgm"));
-    loadAudio(_T(R"(resources\audio\barb_break.mp3)"), _T("barb_break"));
-    loadAudio(_T(R"(resources\audio\bullet_time.mp3)"), _T("bullet_time"));
-
-    loadAudio(_T(R"(resources\audio\enemy_dash.mp3)"), _T("enemy_dash"));
-    loadAudio(_T(R"(resources\audio\enemy_run.mp3)"), _T("enemy_run"));
-    loadAudio(_T(R"(resources\audio\enemy_hurt_1.mp3)"), _T("enemy_hurt_1"));
-    loadAudio(_T(R"(resources\audio\enemy_hurt_2.mp3)"), _T("enemy_hurt_2"));
-    loadAudio(_T(R"(resources\audio\enemy_hurt_3.mp3)"), _T("enemy_hurt_3"));
-    loadAudio(_T(R"(resources\audio\enemy_throw_barbs.mp3)"), _T("enemy_throw_barbs"));
-    loadAudio(_T(R"(resources\audio\enemy_throw_silk.mp3)"), _T("enemy_throw_silk"));
-    loadAudio(_T(R"(resources\audio\enemy_throw_sword.mp3)"), _T("enemy_throw_sword"));
-
-    loadAudio(_T(R"(resources\audio\player_attack_1.mp3)"), _T("player_attack_1"));
-    loadAudio(_T(R"(resources\audio\player_attack_2.mp3)"), _T("player_attack_2"));
-    loadAudio(_T(R"(resources\audio\player_attack_3.mp3)"), _T("player_attack_3"));
-    loadAudio(_T(R"(resources\audio\player_dead.mp3)"), _T("player_dead"));
-    loadAudio(_T(R"(resources\audio\player_hurt.mp3)"), _T("player_hurt"));
-    loadAudio(_T(R"(resources\audio\player_jump.mp3)"), _T("player_jump"));
-    loadAudio(_T(R"(resources\audio\player_land.mp3)"), _T("player_land"));
-    loadAudio(_T(R"(resources\audio\player_roll.mp3)"), _T("player_roll"));
-    loadAudio(_T(R"(resources\audio\player_run.mp3)"), _T("player_run"));
+    // 将设置文件读入加载内存
+    if (!userSettings.load("setting.cfg"))
+        throw "./setting.cfg";
 }
 
-Atlas* ResourcesManager::findAtlas(const std::string& id) const
-{
+// 加载磁盘中的全部对象
+void ResourcesManager::load() {
+    loadPre();
+    loadAsync();
+}
+
+Atlas* ResourcesManager::findAtlas(const std::string& id) const {
     const auto& itor = atlasPool.find(id);
-    if (itor == atlasPool.end())
-        return nullptr;
-    
+    if (itor == atlasPool.end()) return nullptr;
+
     return itor->second;
 }
 
-IMAGE* ResourcesManager::findImage(const std::string& id) const
-{
+IMAGE* ResourcesManager::findImage(const std::string& id) const {
     const auto& itor = imagePool.find(id);
-    if (itor == imagePool.end())
-        return nullptr;
-    
+    if (itor == imagePool.end()) return nullptr;
+
     return itor->second;
 }
+
+const StrData& ResourcesManager::findSetData(const std::string& id) { return userSettings[id]; }
 
 // 图像翻转
-
-void ResourcesManager::flipImage(IMAGE* srcImage, IMAGE* dstImage, int numH)
-{
+void ResourcesManager::flipImage(IMAGE* srcImage, IMAGE* dstImage, int numH) {
     int w = srcImage->getwidth();
     int h = srcImage->getheight();
     int wFrame = w / numH;
     Resize(dstImage, w, h);
     DWORD* srcBuffer = GetImageBuffer(srcImage);
     DWORD* dstBuffer = GetImageBuffer(dstImage);
-    for (int i = 0; i < numH; i++)
-    {
+    for (int i = 0; i < numH; i++) {
         int xLeft = i * wFrame;
         int xRight = (i + 1) * wFrame;
-        for (int y = 0; y < h; y++)
-        {
-            for (int x = xLeft; x < xRight; x++)
-            {
+        for (int y = 0; y < h; y++) {
+            for (int x = xLeft; x < xRight; x++) {
                 int idxSrc = y * w + x;
                 int idxDst = y * w + xRight - (x - xLeft);
                 dstBuffer[idxDst] = srcBuffer[idxSrc];
@@ -208,8 +247,8 @@ void ResourcesManager::flipImage(IMAGE* srcImage, IMAGE* dstImage, int numH)
     }
 }
 
-void ResourcesManager::flipImage(const std::string& srcId, const std::string dstId, int numH)
-{
+void ResourcesManager::flipImage(const std::string& srcId,
+                                 const std::string dstId, int numH) {
     IMAGE* srcImg = imagePool[srcId];
     IMAGE* dstImg = new IMAGE();
 
@@ -218,13 +257,12 @@ void ResourcesManager::flipImage(const std::string& srcId, const std::string dst
     imagePool[dstId] = dstImg;
 }
 
-void ResourcesManager::flipAtlas(const std::string& srcId, const std::string dstId)
-{
+void ResourcesManager::flipAtlas(const std::string& srcId,
+                                 const std::string dstId) {
     Atlas* srcAtlas = atlasPool[srcId];
     Atlas* dstAtlas = new Atlas();
 
-    for (int i = 0; i < srcAtlas->getSize(); i++)
-    {
+    for (int i = 0; i < srcAtlas->getSize(); i++) {
         IMAGE imgFlipped;
         flipImage(srcAtlas->getImage(i), &imgFlipped);
         dstAtlas->addImage(imgFlipped);
