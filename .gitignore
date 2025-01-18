@@ -34,3 +34,4 @@
 # CMAKE
 build/
 other/
+.vscode/
