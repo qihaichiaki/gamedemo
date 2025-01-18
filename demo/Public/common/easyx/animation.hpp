@@ -4,10 +4,11 @@
 #include <functional>
 #include <vector>
 
+#include "../camera.hpp"
+#include "../timer.hpp"
+#include "../vector2.hpp"
 #include "easyx/atlas.hpp"
-#include "timer.hpp"
 #include "util.hpp"
-#include "vector2.hpp"
 
 class Animation
 {
@@ -112,6 +113,18 @@ public:
         rectDst.w = frame.rectSrc.w, rectDst.h = frame.rectSrc.h;
 
         putimageEx(frame.img, &rectDst, &frame.rectSrc);
+    }
+
+    void onRender(const Camera& camera)
+    {
+        const Frame& frame = frameList[idxFrame];
+
+        Rect rectDst;
+        rectDst.x = static_cast<int>(position.x) - frame.rectSrc.w / 2;
+        rectDst.y = static_cast<int>(position.y) - frame.rectSrc.h / 2;
+        rectDst.w = frame.rectSrc.w, rectDst.h = frame.rectSrc.h;
+
+        putimageEx(camera, frame.img, &rectDst, &frame.rectSrc);
     }
 
 private:
