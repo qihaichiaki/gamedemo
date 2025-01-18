@@ -1,10 +1,10 @@
 #ifndef _ENEMY_STATE_NODES_H_
 #define _ENEMY_STATE_NODES_H_
 
-#include "timer.h"
 #include "stateNode.h"
+#include "timer.hpp"
 
-class EnemyAimState: public StateNode
+class EnemyAimState : public StateNode
 {
 public:
     EnemyAimState();
@@ -17,7 +17,7 @@ private:
     Timer timer;
 };
 
-class EnemyDashInAirState: public StateNode
+class EnemyDashInAirState : public StateNode
 {
 public:
     EnemyDashInAirState() = default;
@@ -31,7 +31,7 @@ private:
     const float SPEED_DASH = 1500.0f;
 };
 
-class EnemyDashOnFloorState: public StateNode
+class EnemyDashOnFloorState : public StateNode
 {
 public:
     EnemyDashOnFloorState();
@@ -47,7 +47,7 @@ private:
     Timer timer;
 };
 
-class EnemyDeadState: public StateNode
+class EnemyDeadState : public StateNode
 {
 public:
     EnemyDeadState() = default;
@@ -56,7 +56,7 @@ public:
     void onEnter() override;
 };
 
-class EnemyFallState: public StateNode
+class EnemyFallState : public StateNode
 {
 public:
     EnemyFallState() = default;
@@ -66,7 +66,7 @@ public:
     void onUpdate(float delta) override;
 };
 
-class EnemyIdleState: public StateNode
+class EnemyIdleState : public StateNode
 {
 public:
     EnemyIdleState();
@@ -80,7 +80,7 @@ private:
     Timer timer;
 };
 
-class EnemyJumpState: public StateNode
+class EnemyJumpState : public StateNode
 {
 public:
     EnemyJumpState() = default;
@@ -93,7 +93,7 @@ private:
     const float SPEED_JUMP = 800.0f;
 };
 
-class EnemyRunState: public StateNode
+class EnemyRunState : public StateNode
 {
 public:
     EnemyRunState() = default;
@@ -108,8 +108,7 @@ private:
     const float SPEED_RUN = 500.0f;
 };
 
-
-class EnemySquatState: public StateNode
+class EnemySquatState : public StateNode
 {
 public:
     EnemySquatState();
@@ -122,7 +121,7 @@ private:
     Timer timer;
 };
 
-class EnemyThrowBarbState: public StateNode
+class EnemyThrowBarbState : public StateNode
 {
 public:
     EnemyThrowBarbState();
@@ -135,7 +134,7 @@ private:
     Timer timer;
 };
 
-class EnemyThrowSilkState: public StateNode
+class EnemyThrowSilkState : public StateNode
 {
 public:
     EnemyThrowSilkState();
@@ -148,7 +147,7 @@ private:
     Timer timer;
 };
 
-class EnemyThrowSwordState: public StateNode
+class EnemyThrowSwordState : public StateNode
 {
 public:
     EnemyThrowSwordState();

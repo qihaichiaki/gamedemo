@@ -2,7 +2,7 @@
 #define _BARB_H_
 // 刺球对象
 
-#include "animation.h"
+#include "animation.hpp"
 #include "collisionBox.h"
 
 class Barb
@@ -24,8 +24,7 @@ public:
 
 private:
     // TODO: 这里可以使用状态机进行控制
-    enum class Stage
-    {
+    enum class Stage {
         Idle,  // 上下浮动状态
         Aim,   // 瞄准状态
         Dash,  // 冲刺状态

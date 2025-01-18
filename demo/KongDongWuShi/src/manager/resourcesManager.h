@@ -6,11 +6,12 @@
 #include <string>
 #include <unordered_map>
 
-#include "atlas.h"
+#include "atlas.hpp"
 #include "util.hpp"
 
 // 资源管理器
-class ResourcesManager {
+class ResourcesManager
+{
 public:
     static ResourcesManager* instance();
 
@@ -28,10 +29,11 @@ public:
     IMAGE* findImage(const std::string& id) const;
 
     const StrData& findSetData(const std::string& id);
+
 private:
     std::unordered_map<std::string, Atlas*> atlasPool;
     std::unordered_map<std::string, IMAGE*> imagePool;
-    
+
     DataTransformation userSettings;  // 用户设置信息
 private:
     ResourcesManager();
@@ -48,8 +50,7 @@ private:
     /// @param srcId 源Image对象池中的ID
     /// @param dstId 翻转处理后的Image对象在对象池中的ID
     /// @param numH 这一张动画图片素材包含多少个子序列帧
-    void flipImage(const std::string& srcId, const std::string dstId,
-                   int numH = 1);
+    void flipImage(const std::string& srcId, const std::string dstId, int numH = 1);
 
     /// @brief 这是一个水平翻转图集的操作
     /// @param srcId 源Atlas对象池中的ID

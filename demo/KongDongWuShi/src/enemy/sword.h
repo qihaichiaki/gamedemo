@@ -1,7 +1,7 @@
 #ifndef _SWORD_H_
 #define _SWORD_H_
 
-#include "animation.h"
+#include "animation.hpp"
 #include "collisionBox.h"
 
 class Sword

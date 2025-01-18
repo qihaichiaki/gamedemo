@@ -1,8 +1,8 @@
 #ifndef __LOAD_SCENE_H__
 #define __LOAD_SCENE_H__
 
+#include "animation.hpp"
 #include "scene.h"
-#include "animation.h"
 
 // 过渡场景
 
@@ -20,6 +20,5 @@ public:
 private:
     Animation loadSceneAnimation;
 };
-
 
 #endif

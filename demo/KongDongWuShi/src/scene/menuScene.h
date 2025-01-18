@@ -1,8 +1,8 @@
 #ifndef __MENU_SCENE_H__
 #define __MENU_SCENE_H__
 
+#include "animation.hpp"
 #include "scene.h"
-#include "animation.h"
 
 // 菜单场景
 class MenuScene : public Scene
@@ -49,6 +49,5 @@ public:
     // 将keycode转换为字符串的形式
     static std::string keyCodeStr(int keyCode);
 };
-
 
 #endif

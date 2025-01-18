@@ -1,10 +1,10 @@
 #ifndef _PLAYER_STATE_NODES_H_
 #define _PLAYER_STATE_NODES_H_
 
-#include "timer.h"
 #include "stateNode.h"
+#include "timer.hpp"
 
-class PlayerAttackState: public StateNode
+class PlayerAttackState : public StateNode
 {
 public:
     PlayerAttackState();
@@ -21,7 +21,7 @@ private:
     void updateHitBoxPosition();
 };
 
-class PlayerDeadState: public StateNode
+class PlayerDeadState : public StateNode
 {
 public:
     PlayerDeadState();
@@ -34,7 +34,7 @@ private:
     Timer timer;
 };
 
-class PlayerFallState: public StateNode
+class PlayerFallState : public StateNode
 {
 public:
     PlayerFallState();
@@ -44,7 +44,7 @@ public:
     void onUpdate(float delta) override;
 };
 
-class PlayerIdleState: public StateNode
+class PlayerIdleState : public StateNode
 {
 public:
     PlayerIdleState();
@@ -54,7 +54,7 @@ public:
     void onUpdate(float delta) override;
 };
 
-class PlayerJumpState: public StateNode
+class PlayerJumpState : public StateNode
 {
 public:
     PlayerJumpState();
@@ -64,7 +64,7 @@ public:
     void onUpdate(float delta) override;
 };
 
-class PlayerRollState: public StateNode
+class PlayerRollState : public StateNode
 {
 public:
     PlayerRollState();
@@ -78,7 +78,7 @@ private:
     Timer timer;
 };
 
-class PlayerRunState: public StateNode
+class PlayerRunState : public StateNode
 {
 public:
     PlayerRunState();
