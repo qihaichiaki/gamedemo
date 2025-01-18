@@ -9,3 +9,5 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # 子工程添加目录
 add_subdirectory(KongDongWuShi)
+
+add_subdirectory(HJMAdventure)
