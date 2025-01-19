@@ -50,6 +50,9 @@ target_include_directories(${HJMASCLIENT_NAME}
     "${PUBLIC_COMMON}/easyx"
 )
 
+# server包含common
+target_include_directories(${HJMASERVER_NAME} PRIVATE "${PUBLIC_COMMON}")
+
 # 复制资源文件到输出目录
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release")

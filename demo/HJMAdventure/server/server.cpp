@@ -1,5 +1,6 @@
 #include <httplib.h>
-#include <json/json.h>
+
+#include <jsonUtils.hpp>
 
 int main()
 {
@@ -12,21 +13,17 @@ int main()
 
     uint16_t port;
     std::string text;
-    Json::CharReaderBuilder readerBuilder;
+    JsonUtils::JsonReader json_reader;
     {
         // 读取配置件
-        Json::Value config;
-        std::ifstream ifs("resources/settings.json");
-        std::string err;
-        if (!Json::parseFromStream(readerBuilder, ifs, &config, &err)) {
-            std::cerr << "`resources/settings.json`配置文件读取失败\n" << err << std::endl;
+        if (!json_reader.readFile("resources/settings.json")) {
+            std::cerr << "`resources/settings.json`配置文件读取失败\n" << std::endl;
             system("pause");
             return -1;
         }
-        ifs.close();
         // 读取配置文件中的端口号和文本
-        port = config["port"].asUInt();
-        text = config["text"].asCString();
+        port = json_reader["port"].asUInt();
+        text = json_reader["text"].asCString();
     }
 
     httplib::Server svr;
@@ -44,17 +41,13 @@ int main()
     svr.Post("/login", [&](const httplib::Request &req, httplib::Response &res) {
         // WARNING: 是否需要加锁？
         std::lock_guard<std::mutex> lock(mtx);
-        if (progress_1 >= 0 && progress_2 >= 0)
+        if (progress_1 >= 0 && progress_2 >= 0) {
             res.set_content("-1", "text/plain");
-        else {
-            if (progress_1 < 0) {
-                progress_1 = 0;
-                res.set_content("1", "text/plain");
-            } else {
-                progress_2 = 0;
-                res.set_content("2", "text/plain");
-            }
+            return;
         }
+
+        res.set_content(progress_1 >= 0 ? "2" : "1", "text/plain");
+        (progress_1 >= 0) ? progress_2 = 0 : progress_1 = 0;
     });
 
     // 传输文本路由
@@ -66,19 +59,18 @@ int main()
     // 同步进度路由
     svr.Post("/update", [&](const httplib::Request &req, httplib::Response &res) {
         std::lock_guard<std::mutex> lock(mtx);
-        Json::Value data;
-        auto redner = readerBuilder.newCharReader();
+        json_reader.clear();
 
-        if (!redner->parse(req.body.c_str(), req.body.c_str() + req.body.size(), &data, &err)) {
+        if (!json_reader.read(req.body)) {
             res.set_content(err, "text/plain");
         } else {
-            int player_id = data["player_id"].asInt();
+            int player_id = json_reader["player_id"].asInt();
             int return_progress = -1;
             if (player_id == 1) {
-                progress_1 = data["progress"].asInt();
+                progress_1 = json_reader["progress"].asInt();
                 return_progress = progress_2;
             } else if (player_id == 2) {
-                progress_2 = data["progress"].asInt();
+                progress_2 = json_reader["progress"].asInt();
                 return_progress = progress_1;
             }
             res.set_content(std::to_string(return_progress), "text/plain");

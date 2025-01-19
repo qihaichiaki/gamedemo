@@ -1,5 +1,6 @@
 #include <httplib.h>
-#include <json/json.h>
+
+#include <jsonUtils.hpp>
 
 static bool checkPost(const httplib::Result& res)
 {
@@ -22,16 +23,13 @@ int main()
     // 读取配置文件中的端口号
     uint16_t port;
     {
-        Json::Value config;
-        Json::CharReaderBuilder readerBuilder;
-        std::ifstream ifs("resources/clientsettings.json");
-        std::string err;
-        if (!Json::parseFromStream(readerBuilder, ifs, &config, &err)) {
-            std::cerr << "`resources/clientsettings.json`配置文件读取失败\n" << err;
+        JsonUtils::JsonReader json_reader;
+        if (!json_reader.readFile("resources/clientsettings.json")) {
+            std::cerr << "`resources/clientsettings.json`配置文件读取失败\n";
             system("pause");
             return -1;
         }
-        port = config["port"].asUInt();
+        port = json_reader["port"].asUInt();
     }
 
     httplib::Client cli("localhost", port);
@@ -57,21 +55,18 @@ int main()
     bool stop = false;
     std::cout << "game start ========================>\n";
 
-    Json::StreamWriterBuilder writerBuilder;
+    JsonUtils::JsonWriter json_writer;
     while (!stop) {
+        json_writer.clear();
+
         int input;
         std::cout << "player-" << player_id << " 请输入你的更新进度：";
         std::cin >> input;
 
-        Json::Value data;
-        data["player_id"] = player_id;
-        data["progress"] = input;
+        json_writer["player_id"] = player_id;
+        json_writer["progress"] = input;
 
-        std::stringstream ss;
-        auto sw = writerBuilder.newStreamWriter();
-        sw->write(data, &ss);
-
-        auto res_update = cli.Post("/update", ss.str(), "text/plain");
+        auto res_update = cli.Post("/update", json_writer.str(), "text/plain");
         if (checkPost(res_update)) {
             std::cout << "更新成功, 对方进度为: " << std::stoi(res_update->body) << std::endl;
         } else {

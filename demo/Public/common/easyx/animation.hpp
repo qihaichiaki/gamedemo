@@ -100,7 +100,7 @@ public:
     /// @param delta 帧率
     void onUpdate(float delta) { timer.onUpdate(delta); }
 
-    /// @brief 渲染
+    /// @brief 依据动画位置, 按照描点进行渲染
     void onRender()
     {
         const Frame& frame = frameList[idxFrame];
@@ -115,6 +115,7 @@ public:
         putimageEx(frame.img, &rectDst, &frame.rectSrc);
     }
 
+    /// @brief 根据传入的相机对象进行渲染
     void onRender(const Camera& camera)
     {
         const Frame& frame = frameList[idxFrame];
