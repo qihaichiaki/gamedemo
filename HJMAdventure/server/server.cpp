@@ -1,15 +1,11 @@
 #include <httplib.h>
+#include <macro.h>
 
 #include <jsonUtils.hpp>
 
 int main()
 {
-#if defined(_WIN32) || defined(_WIN64)
-    // 设置控制台输出编码为 UTF-8
-    SetConsoleOutputCP(CP_UTF8);
-    // 设置控制台输入编码为 UTF-8
-    SetConsoleCP(CP_UTF8);
-#endif
+    WINDOWS_USE_UTF8;
 
     uint16_t port;
     std::string text;
