@@ -19,7 +19,16 @@ int main()
         }
         // 读取配置文件中的端口号和文本
         port = json_reader["port"].asUInt();
-        text = json_reader["text"].asCString();
+        std::ifstream ifs("resources/text.txt");
+        if (!ifs.good()) {
+            std::cerr << "`resources/text.txt`文字读取失败, 将使用默认文本\n" << std::endl;
+            text = "hello, world";
+        } else {
+            std::stringstream ss;
+            ss << ifs.rdbuf();
+            text = ss.str();
+        }
+        ifs.close();
     }
 
     httplib::Server svr;
@@ -42,13 +51,16 @@ int main()
             return;
         }
 
-        res.set_content(progress_1 >= 0 ? "2" : "1", "text/plain");
-        (progress_1 >= 0) ? progress_2 = 0 : progress_1 = 0;
+        std::string player_id = (progress_1 >= 0) ? "2" : "1";
+        res.set_content(player_id, "text/plain");
+        (progress_1 >= 0) ? (progress_2 = 0) : (progress_1 = 0);
+        std::cout << "玩家" << player_id << "加入游戏\n";
     });
 
     // 传输文本路由
     svr.Post("/query_text", [&](const httplib::Request &req, httplib::Response &res) {
         res.set_content(text, "text/plain");
+        std::cout << "获取文本信息...\n";
     });
 
     std::string err;
@@ -70,8 +82,12 @@ int main()
                 return_progress = progress_1;
             }
             res.set_content(std::to_string(return_progress), "text/plain");
+            // std::cout << "玩家" << player_id << "同步信息\n";
+            // std::cout << "当前进度: " << progress_1 << " vs " << progress_2 << std::endl;
         }
     });
+
+    std::cout << "服务器配置成功......\n";
 
     // 监听端口, 任意ip
     svr.listen("0.0.0.0", port);

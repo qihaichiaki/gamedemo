@@ -18,7 +18,8 @@
 /// @brief 矩形
 /// @note x、y为矩形左上角坐标
 /// @note w、h为矩形宽高
-struct Rect {
+struct Rect
+{
     int x, y;
     int w, h;
 };
@@ -52,6 +53,8 @@ inline void putimageEx(Camera camera, IMAGE* img, const Rect* rectDst,
     Rect rectDstCamera;
     rectDstCamera.x = rectDst->x - static_cast<int>(posCamera.x);
     rectDstCamera.y = rectDst->y - static_cast<int>(posCamera.y);
+    rectDstCamera.w = rectDst->w;
+    rectDstCamera.h = rectDst->h;
 
     putimageEx(img, &rectDstCamera, rectSrc);
 }
@@ -139,7 +142,8 @@ inline void outTextXYShaded(int x, int y, LPCTSTR str, int size = 0,
 #endif
 }
 
-struct StrData {
+struct StrData
+{
     StrData() = default;
     StrData(const std::string& str) : _str(str) {}
 

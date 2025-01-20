@@ -6,21 +6,16 @@
 #include <vector2.hpp>
 
 constexpr int FACING_NUM = 4;
+enum Facing { Up, Down, Left, Right };
 
 class Player
 {
 public:
-    enum Facing { Up, Down, Left, Right };
-
-public:
-    Player(Atlas* atlas_idle[], Atlas* atlas_run[])
+    Player(Atlas atlas_idle[], Atlas atlas_run[])
     {
-        assert(sizeof(atlas_idle) == FACING_NUM * sizeof(Atlas*));
-        assert(sizeof(atlas_run) == FACING_NUM * sizeof(Atlas*));
-
         for (int i = 0; i < FACING_NUM; ++i) {
-            anim_idle[i].addFrame(atlas_idle[i]);
-            anim_run[i].addFrame(atlas_run[i]);
+            anim_idle[i].addFrame(&atlas_idle[i]);
+            anim_run[i].addFrame(&atlas_run[i]);
 
             anim_idle[i].setInterval(0.1f);
             anim_idle[i].setLoop(true);
@@ -29,6 +24,8 @@ public:
         }
     }
 
+    Player(const Player&) = delete;
+    Player& operator=(const Player&) = delete;
     ~Player() = default;
 
     void onUpdate(float delta)

@@ -14,6 +14,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${PROJECT_NAME}/bin")
 file(GLOB_RECURSE SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/server/*")
 file(GLOB_RECURSE CLIENT_SRC "${CMAKE_CURRENT_SOURCE_DIR}/client/*")
 
+# 启动宽字符支持
+add_definitions(-DUNICODE -D_UNICODE)
+
 add_executable(${HJMASERVER_NAME} ${SERVER_SRC})
 add_executable(${HJMASCLIENT_NAME} ${CLIENT_SRC})
 
@@ -39,8 +42,9 @@ target_include_directories(${HJMASCLIENT_NAME} PRIVATE "${PUBLIC_THIRDPARTY}/eas
 
 # client链接easyx库
 target_link_libraries(${HJMASCLIENT_NAME}
-    "${PUBLIC_THIRDPARTY}/easyx/lib/EasyXa.lib"
-    "${PUBLIC_THIRDPARTY}/easyx/lib/EasyXw.lib"
+
+    # "${PUBLIC_THIRDPARTY}/easyx/lib/EasyXa.lib"  # ansi编码
+    "${PUBLIC_THIRDPARTY}/easyx/lib/EasyXw.lib" # unicode编码
 )
 
 # client包含common
