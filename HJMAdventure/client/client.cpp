@@ -236,14 +236,6 @@ int main()
             if (stage != Stage::Racing) continue;
         }
 
-        if (str_line_list[idx_line][idx_char] == ' ') {
-            idx_char++;
-            if (idx_char >= str_line_list[idx_line].length()) {
-                idx_char = 0;
-                idx_line++;
-            }
-        }
-
         if (msg.message == WM_CHAR && idx_line < str_line_list.size()) {
             const std::string& str_line = str_line_list[idx_line];
             if (str_line[idx_char] == msg.ch) {
